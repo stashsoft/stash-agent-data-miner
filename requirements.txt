@@ -6,8 +6,11 @@ langgraph
 langchain[openai]
 langchain-openai
 langchain-ollama
+langchain-anthropic
+langchain-deepseek
 pypdf
 pandas
 unstructured
 openpyxl
 networkx
+sqlalchemy

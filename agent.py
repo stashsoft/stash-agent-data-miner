@@ -1,6 +1,6 @@
 import pandas as pd
 from data_miner.llm import create_model
-from data_miner.db import add_log, fetch_files, fetch_columns, fetch_llm, set_file_processed, set_file_processing
+from data_miner.db import add_log, fetch_files, fetch_columns, fetch_llm, set_file_processed, set_file_processing, update_agent_status
 from data_miner.loader import load_document
 from data_miner.data import extract_data, prepare_columns_prompt
 
@@ -55,5 +55,12 @@ try:
         # Set the file as processed
         set_file_processed(file.id)
 
+        # Set the agent status to running
+        update_agent_status(2, "", "")
+
 except Exception as e:
     add_log(f"Error: {e.args[0]}")
+
+    update_agent_status(0, "", f"An error occurred: {e.args[0]}")
+
+update_agent_status(0, "The agent has finished processing files!", "")

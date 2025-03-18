@@ -48,10 +48,10 @@ def fetch_running_info():
         result_files = conn.execute(sqlalchemy.text("SELECT id, name, processed FROM file"))
         files = [{"id": row['id'], "name": row['name'], "processed": row["processed"]} for row in result_files.mappings().all()]
 
-        result_status = conn.execute(sqlalchemy.text("SELECT status, message FROM agent_status"))
+        result_status = conn.execute(sqlalchemy.text("SELECT status, errorMessage, successMessage FROM agent_status"))
         status = result_status.mappings().first()
 
-        return RunningInfo(logs=logs, files=files, status=status['status'], statusMessage=status['message'])
+        return RunningInfo(logs=logs, files=files, status=status['status'], errorMessage=status['errorMessage'], successMessage=status['successMessage'])
 
 def set_file_processed(id: int):
     with engine.connect() as conn:
@@ -72,10 +72,10 @@ def update_agent_info(files: list[dict[str, str]], columns: list[dict[str, str]]
         conn.execute(sqlalchemy.text("INSERT INTO file (name, file_name, processed, extension) VALUES (:name, :file_name, 0, :extension)"), files)
         conn.execute(sqlalchemy.text("INSERT INTO column (name, description) VALUES (:name, :description)"), columns)
         conn.execute(sqlalchemy.text("UPDATE llm SET provider = :provider, model_name = :model_name, key = :key"), {"provider": provider, "model_name": model_name, "key": key})
-        conn.execute(sqlalchemy.text("UPDATE agent_status SET status = 1, message = ''"))
+        conn.execute(sqlalchemy.text("UPDATE agent_status SET status = 1, errorMessage = '', successMessage = ''"))
         conn.commit()
 
-def update_agent_status(status: int, message: str):
+def update_agent_status(status: int, errorMessage: str, successMessage: str):
     with engine.connect() as conn:
-        conn.execute(sqlalchemy.text("UPDATE agent_status SET status = :status, message = :message"), {"status": status, "message": message})
+        conn.execute(sqlalchemy.text("UPDATE agent_status SET status = :status, errorMessage = :errorMessage, successMessage = :successMessage"), {"status": status, "errorMessage": errorMessage, "successMessage": successMessage})
         conn.commit()

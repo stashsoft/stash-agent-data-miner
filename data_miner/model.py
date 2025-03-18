@@ -46,4 +46,5 @@ class RunningInfo:
     logs: list[Log]
     files: list[dict[str, str]]
     status: str
-    statusMessage: str
+    errorMessage: str
+    successMessage: str

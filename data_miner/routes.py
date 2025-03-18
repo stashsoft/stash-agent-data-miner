@@ -1,8 +1,8 @@
+import time
+import random
 from fastapi import APIRouter, Request
 from data_miner.db import fetch_agent_info, update_agent_info, update_agent_status, fetch_running_info
 from data_miner.model import AgentInfo, RunningInfo
-import time
-import random
 
 router = APIRouter()
 

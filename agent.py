@@ -1,3 +1,4 @@
+import os
 import pandas as pd
 from data_miner.llm import create_model
 from data_miner.db import add_log, fetch_files, fetch_columns, fetch_llm, set_file_processed, set_file_processing, update_agent_status
@@ -59,8 +60,20 @@ try:
         update_agent_status(2, "", "")
 
 except Exception as e:
+    # Add log
     add_log(f"Error: {e.args[0]}")
 
+    # Update the agent status
     update_agent_status(0, "", f"An error occurred: {e.args[0]}")
 
+# Delete all files
+PATH = "./uploads"
+
+for filename in os.listdir(PATH):
+    file_path = os.path.join(PATH, filename)
+    
+    if os.path.isfile(file_path):
+        os.remove(file_path)
+
+# Update the agent status
 update_agent_status(0, "The agent has finished processing files!", "")

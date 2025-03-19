@@ -1,3 +1,6 @@
 .venv/
+files/
+__pycache__/
 
 .DS_Store
+output.csv

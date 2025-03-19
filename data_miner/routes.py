@@ -118,5 +118,5 @@ def get_running_info() -> RunningInfo:
 
 @router.get("/download")
 def download():
-    file_path = "./updated_data.csv"
-    return FileResponse(path=file_path, filename="updated_data.csv", media_type="text/csv")
+    file_path = "./output.csv"
+    return FileResponse(path=file_path, filename="output.csv", media_type="text/csv")

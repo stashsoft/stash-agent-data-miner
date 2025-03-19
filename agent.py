@@ -51,7 +51,7 @@ try:
         output = pd.concat([output, response.output], ignore_index=True)
         
         # Update the output file
-        output.to_csv("./updated_data.csv", index=False)
+        output.to_csv("./output.csv", index=False)
 
         add_log(f"Output file has been updated!")
 

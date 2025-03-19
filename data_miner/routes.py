@@ -1,6 +1,7 @@
 import time
 import random
 from fastapi import APIRouter, Request
+from fastapi.responses import FileResponse
 from data_miner.db import fetch_agent_info, update_agent_info, update_agent_status, fetch_running_info
 from data_miner.model import AgentInfo, RunningInfo
 from data_miner.process import start_agent, stop_agent
@@ -114,3 +115,8 @@ def stop():
 @router.get("/get-running-info")
 def get_running_info() -> RunningInfo:
     return fetch_running_info()
+
+@router.get("/download")
+def download():
+    file_path = "./updated_data.csv"
+    return FileResponse(path=file_path, filename="updated_data.csv", media_type="text/csv")

@@ -1,10 +1,10 @@
 # Stash Data Miner
 
-AI Data Miner is an AI agent that extracts specific information from various files, transforms it, and compiles the data into a single CSV file. Most AI agents on the internet can only work with a small amount of data or a single file, which is practically useless since, in the real world, you usually need to work with multiple files or large volumes of data. Stash Data Miner is designed to extract data that matches specific criteria from multiple files based on natural language commands. It processes each file you provide, parses and extracts the necessary information, and compiles all of it into a single CSV file.
+Stash Data Miner is an AI agent that extracts specific information from various files, transforms it, and compiles the data into a single CSV file. Most AI agents on the internet can only work with a small amount of data or a single file, which is practically useless since, in the real world, you usually need to work with multiple files or large volumes of data. Stash Data Miner is designed to extract data that matches specific criteria from multiple files based on natural language commands. It processes each file you provide, parses and extracts the necessary information, and compiles all of it into a single CSV file.
 
 For example, you can provide candidates' CVs for a position at your company, and Stash Data Miner will generate a single CSV file containing information on all applicants, with each row corresponding to a candidate.
 
-Another example, you can provide invoice files, and Stash Data Miner will generate a CSV file listing all invoice numbers, products, and total amounts paid.
+Similarly, you can provide a set of invoice files, and Stash Data Miner will generate a CSV file listing all invoice numbers, products, and total amounts paid.
 
 ## How to use?
 
@@ -18,7 +18,7 @@ You must provide the following data to the agent to run it:
   - Deepseek
   - Ollama
 - **LLM:** You must type the name of the AI model that you want to use like `gpt-4o-mini`.
-- **API Key:** You must set an API Key. This option isn't available for Ollama.
+- **API Key:** You must set an API Key. This option isn't available for Ollama. It is disabled if the selected provider is Ollama.
 
 When you start the agent, it either uploads the files or moves them into the sandbox depending on whether it runs on web or on [Stash](https://stashsoftware.com). Then, it reads each file one by one and queries LLM to extract information from your files. As the agent extracts the required information from a file, it updates the output file accordingly. You can download the output CSV file at any time.
 
@@ -34,7 +34,7 @@ The following file types are supported:
 - `.txt`
 - `*.csv`
 
-## UI / Workflow
+## Workflow
 
 This section includes detailed information on how Stash Data Miner works. If you do not plan to update the source code or customize the agent for your own purposes, you can skip this section.
 
@@ -56,19 +56,19 @@ If the agent is running independently of Stash, the close button will not be dis
 
 This section contains a form that accepts input from user (See: "How to use?" section). The form also contains a button that allows you to start / stop the agent.
 
-The columns section within the Agent Form section accepts columns and descriptions. When you type something in the "Column name" or "Description" fields in the last row, a new row is automatically added below the last row in the list. If you delete the text from both fields in a row, that row is automatically removed.
+The columns section accepts columns and descriptions. When you type something in a "Column name" or "Description" field in the last row, a new row is automatically added below the last row in the list. If you delete the text from both fields in a row, that row is automatically removed.
 
 ### Results
 
 This section includes the following sub-sections.
 
-**Output file:** It displays the output file in a spreadsheet view. The file is updated real time. You can download the file at any time while agent is running. When the file is updated, the scoll bar scrolls to the bottom of the content. When you click the "Download" button, the file is downloaded.
+**Message:** A success or error message always appears at the beginning of the Results section.
 
 **File list:** All files given by the user are listed on this section. The purpose of this section is to display the status of files in the list. There are three statuses:
 
-- Completed
-- Processing
-- Pending
+- Completed (displays a checkmark next to the file name)
+- Processing (displays a loading image next to the file name)
+- Pending (no icon is displayed)
 
 The scroll bar is automatically moved to display the currently processing file. 
 
@@ -158,6 +158,12 @@ Stops the agent.
 ### `/get-running-info`
 
 Returns the agent's running information.
+
+`processed` attribute of each file has one of the following values:
+
+- `0`: pending
+- `1`: processing
+- `2`: completed
 
 **Method:** GET
 

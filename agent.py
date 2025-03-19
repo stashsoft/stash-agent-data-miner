@@ -5,6 +5,8 @@ from data_miner.db import add_log, fetch_files, fetch_columns, fetch_llm, set_fi
 from data_miner.loader import load_document
 from data_miner.data import extract_data, prepare_columns_prompt
 
+add_log("Agent subprocess has started!")
+
 # Initialize LLM
 llm = create_model(fetch_llm())
 
@@ -57,23 +59,23 @@ try:
         set_file_processed(file.id)
 
         # Set the agent status to running
-        update_agent_status(2, "", "")
+        update_agent_status(2, None, None)
+    
+    # Update the agent status
+    update_agent_status(0, "The agent has finished processing files!", None)
 
 except Exception as e:
     # Add log
     add_log(f"Error: {e.args[0]}")
 
     # Update the agent status
-    update_agent_status(0, "", f"An error occurred: {e.args[0]}")
+    update_agent_status(0, None, f"An error occurred: {e.args[0]}")
 
 # Delete all files
-PATH = "./uploads"
+PATH = "./files"
 
 for filename in os.listdir(PATH):
     file_path = os.path.join(PATH, filename)
     
     if os.path.isfile(file_path):
         os.remove(file_path)
-
-# Update the agent status
-update_agent_status(0, "The agent has finished processing files!", "")

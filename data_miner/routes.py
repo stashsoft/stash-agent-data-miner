@@ -3,10 +3,11 @@ import random
 from fastapi import APIRouter, Request
 from data_miner.db import fetch_agent_info, update_agent_info, update_agent_status, fetch_running_info
 from data_miner.model import AgentInfo, RunningInfo
+from data_miner.process import start_agent, stop_agent
 
 router = APIRouter()
 
-@router.get("/")
+@router.get("/get-agent-info")
 def root() -> AgentInfo:
     agent_info = fetch_agent_info()
 
@@ -24,8 +25,10 @@ async def start(request: Request):
     # Check if all files have valid types
     supported_types = ['pdf', 'doc', 'docx', 'xls', 'xlsx', 'md', 'txt', 'csv']
 
-    if file.extension not in supported_types:
-        return {"message": f"Unsupported file type for the file {file.name}", "status": "error"}
+    for file in files:
+        file_extension = file.filename.split('.')[-1]
+        if file_extension not in supported_types:
+            return {"message": f"Unsupported file type for the file {file.filename}", "status": "error"}
 
     # Check if all column names are valid
     column_names = form.getlist("columnNames[]")
@@ -82,7 +85,7 @@ async def start(request: Request):
             new_filename = f"{timestamp}_{random_number}.{file_extension}"
 
             # Save the file with the new name
-            with open(f"uploads/{new_filename}", "wb") as f:
+            with open(f"files/{new_filename}", "wb") as f:
                 f.write(contents)
 
             # Add the new filename to the list of uploaded files
@@ -93,6 +96,9 @@ async def start(request: Request):
         # Update the agent information
         update_agent_info(uploaded_files, columns, provider, model_name, api_key)
 
+        # Start the agent
+        start_agent()
+
         return {"message": "The agent is preparing to run. Please wait!", "status": "success"}
         
     except Exception as e:
@@ -100,7 +106,8 @@ async def start(request: Request):
 
 @router.post("/stop")
 def stop():
-    update_agent_status(0, "", "")
+    update_agent_status(0, None, None)
+    stop_agent()
 
     return {}
 

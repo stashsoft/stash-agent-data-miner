@@ -23,9 +23,9 @@ def fetch_agent_info():
 
 def fetch_files() -> list[File]:
     with engine.connect() as conn:
-        result = conn.execute(sqlalchemy.text("SELECT id, name, processed, extension FROM file"))
+        result = conn.execute(sqlalchemy.text("SELECT id, name, file_name, processed, extension FROM file"))
 
-        return [File(id=row['id'], name=row['name'], processed=row['processed'], extension=row['extension']) for row in result.mappings().all()]
+        return [File(id=row['id'], name=row['name'], file_name=row['file_name'], processed=row['processed'], extension=row['extension']) for row in result.mappings().all()]
 
 def fetch_columns() -> list[Column]:
     with engine.connect() as conn:
@@ -72,10 +72,10 @@ def update_agent_info(files: list[dict[str, str]], columns: list[dict[str, str]]
         conn.execute(sqlalchemy.text("INSERT INTO file (name, file_name, processed, extension) VALUES (:name, :file_name, 0, :extension)"), files)
         conn.execute(sqlalchemy.text("INSERT INTO column (name, description) VALUES (:name, :description)"), columns)
         conn.execute(sqlalchemy.text("UPDATE llm SET provider = :provider, model_name = :model_name, key = :key"), {"provider": provider, "model_name": model_name, "key": key})
-        conn.execute(sqlalchemy.text("UPDATE agent_status SET status = 1, errorMessage = '', successMessage = ''"))
+        conn.execute(sqlalchemy.text("UPDATE agent_status SET status = 1, errorMessage = NULL, successMessage = NULL"))
         conn.commit()
 
-def update_agent_status(status: int, errorMessage: str, successMessage: str):
+def update_agent_status(status: int, successMessage: str | None, errorMessage: str | None):
     with engine.connect() as conn:
         conn.execute(sqlalchemy.text("UPDATE agent_status SET status = :status, errorMessage = :errorMessage, successMessage = :successMessage"), {"status": status, "errorMessage": errorMessage, "successMessage": successMessage})
         conn.commit()

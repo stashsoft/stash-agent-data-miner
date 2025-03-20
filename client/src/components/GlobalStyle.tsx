@@ -24,4 +24,32 @@ export default createGlobalStyle(({ theme }:{ theme: Theme }) => `
     text-size-adjust: none;
     -webkit-tap-highlight-color: transparent;
   }
+
+  b,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-weight: 500;
+  }
+
+  .fade-show {
+    opacity: 0;
+  }
+
+  .fade-show-active {
+    opacity: 1;
+    transition: opacity 300ms ease-in-out;
+  }
+
+  .fade-hide {
+    opacity: 1;
+  }
+
+  .fade-hide-active {
+    opacity: 0;
+    transition: opacity 300ms ease-in-out;
+  }
 `)

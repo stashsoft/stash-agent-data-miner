@@ -11,6 +11,12 @@ export default () => {
           tabOverlayBackground: '#dee2e6',
         },
       },
+      length: {
+        genericSpace: '0.7rem',
+      },
+      radius: {
+        generic: '.5rem',
+      },
     },
   })
 

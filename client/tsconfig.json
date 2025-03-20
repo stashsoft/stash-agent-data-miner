@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "downlevelIteration": true,
+    "experimentalDecorators": true,
+    "jsx": "react",
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "target": "es2021"
+  },
+  "include": ["src/**/*.tsx", "src/**/*.d.tsx"],
+  "exclude": ["node_modules"]
+}

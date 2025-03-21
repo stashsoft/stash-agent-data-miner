@@ -3,13 +3,23 @@ export interface Column {
   description: string
 }
 
+export interface ResultLog {
+  createdAt: string
+  id: number
+  message: string
+}
+
 export interface ResultFile {
+  id: number
   name: string
-  status: ResultStatus
+  processed: number
 }
 
 export enum ResultStatus {
-  LOADING,
-  SUCCESS,
-  ERROR,
+  STAND_BY = 1,
+  LOADING = 2,
+  PROCESSING = 4,
+  SUCCESS = 8,
+  ERROR = 16,
+  ABORTING = 32,
 }

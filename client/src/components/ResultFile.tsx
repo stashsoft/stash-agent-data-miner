@@ -50,15 +50,16 @@ const ResultFileComponent: React.FC<Props> = ({ resultFile }) => {
       marginTop={12}
       paddingHorizontal={16}
       paddingVertical={12}
-      {...(resultFile.status !== ResultStatus.LOADING && {
+      {...(resultFile.processed === 2 && {
         background: '$color.dynamic.resultBackground',
       })}
     >
       {Icon}
       <Span flex="1 1 auto" paddingHorizontal="$length.1">{resultFile.name}</Span>
-      { resultFile.status === ResultStatus.LOADING && <Loading color="!primary" size="medium" /> }
-      { resultFile.status === ResultStatus.SUCCESS && <CheckIcon fill="!success" iconSize={20} /> }
-      { resultFile.status === ResultStatus.ERROR && <CloseIcon fill="!danger" iconSize={20} /> }
+      { resultFile.processed < 2
+        ? <Loading color="!primary" size="medium" />
+        : <CheckIcon fill="!success" iconSize={20} />
+      }
     </Li>
   )
 }

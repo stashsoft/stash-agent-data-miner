@@ -2,27 +2,111 @@ import Div from '@smart-react-components/core/Element/Div'
 import React from 'react'
 import Form from './Form'
 import Intro from './Intro'
-import { ResultFile, ResultStatus } from '../types'
+import { ResultFile, ResultLog, ResultStatus } from '../types'
 import Results from './Results'
+import { API_URL } from '../constants'
 
 const App = () => {
-  const [resultFiles, setResultFiles] = React.useState<ResultFile[]>([
-    { name: 'file1.pdf', status: ResultStatus.SUCCESS },
-    { name: 'file2.doc', status: ResultStatus.SUCCESS },
-    { name: 'file3.docx', status: ResultStatus.SUCCESS },
-    { name: 'file4.xls', status: ResultStatus.SUCCESS },
-    { name: 'file5.xlsx', status: ResultStatus.SUCCESS },
-    { name: 'file6.md', status: ResultStatus.SUCCESS },
-    { name: 'file7.txt', status: ResultStatus.ERROR },
-    { name: 'file8.csv', status: ResultStatus.LOADING },
-  ])
-  const [logs, setLogs] = React.useState<string[]>([
-    'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-    'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-    'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
-    'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
-    'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-  ])
+  const [resultFiles, setResultFiles] = React.useState<ResultFile[]>([])
+  const [logs, setLogs] = React.useState<ResultLog[]>([])
+  const [status, setStatus] = React.useState<{ status: ResultStatus, message: string }>({ status: ResultStatus.STAND_BY, message: '' })
+
+  const getRunningInfo = () => {
+    fetch(`${API_URL}/get-running-info`)
+    .then(resp => resp.json())
+    .then(resp => {
+      setResultFiles(resp.files)
+      setLogs(resp.logs)
+
+      let newStatus: ResultStatus
+      let message: string
+      
+      if (resp.successMessage) {
+        newStatus = ResultStatus.SUCCESS
+        message = resp.successMessage
+      } else if (resp.errorMessage) {
+        newStatus = ResultStatus.ERROR
+        message = resp
+      } else {
+        newStatus = resp.status === 0 ? ResultStatus.STAND_BY : ResultStatus.PROCESSING
+      }
+
+      setStatus({
+        status: newStatus,
+        message,
+      })
+
+      if (newStatus === ResultStatus.PROCESSING) {
+        setTimeout(getRunningInfo, 1000)
+      }
+    })
+  }
+
+  const handleAbort = () => {
+    if (status.status !== ResultStatus.PROCESSING) {
+      return
+    }
+
+    setStatus({
+      status: ResultStatus.ABORTING,
+      message: '',
+    })
+
+    fetch(`${API_URL}/stop`, {
+      method: 'POST',
+    })
+  }
+
+  const handleStart = (
+    files: File[],
+    columns: { name: string, description: string }[],
+    provider: string,
+    modelName: string,
+    apiKey: string,
+  ) => {
+    if (!!(status.status & (ResultStatus.LOADING | ResultStatus.PROCESSING | ResultStatus.ABORTING))) {
+      return
+    }
+  
+    const formData = new FormData()
+    files.forEach(file => formData.append('files', file))
+    columns.forEach(column => {
+      if (!column.name.trim() || !column.description.trim()) {
+        return
+      }
+
+      formData.append('columnNames[]', column.name)
+      formData.append('columnDescriptions[]', column.description)
+    })
+    formData.append('provider', provider)
+    formData.append('modelName', modelName)
+    formData.append('apiKey', apiKey)
+
+    setLogs([])
+    setResultFiles([])
+    setStatus({
+      status: ResultStatus.LOADING,
+      message: '',
+    })
+
+    fetch(`${API_URL}/start`, {
+      method: 'POST',
+      body: formData,
+    })
+    .then(resp => resp.json())
+    .then(resp => {
+      if (resp.status === 'error') {
+        setStatus({
+          status: ResultStatus.ERROR,
+          message: resp.message,
+        })
+      } else {
+        getRunningInfo()
+      }
+    })
+  }
+
+  React.useEffect(() => { getRunningInfo() }, [])
 
   return (
     <Div
@@ -31,8 +115,8 @@ const App = () => {
       paddingBottom="$length.3"
     >
       <Intro />
-      <Form />
-      { (resultFiles.length > 0 || logs.length > 0) && <Results resultFiles={resultFiles} logs={logs} /> }
+      <Form onAbort={handleAbort} onStart={handleStart} status={status} />
+      { (resultFiles.length > 0 || logs.length > 0) && <Results resultFiles={resultFiles} logs={logs} status={status.status} /> }
     </Div>
   )
 }

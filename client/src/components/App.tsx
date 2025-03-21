@@ -1,5 +1,6 @@
 import Div from '@smart-react-components/core/Element/Div'
 import React from 'react'
+import Form from './Form'
 import Intro from './Intro'
 
 const App = () => {
@@ -10,6 +11,7 @@ const App = () => {
       flexDirection="column"
     >
       <Intro />
+      <Form />
     </Div>
   )
 }

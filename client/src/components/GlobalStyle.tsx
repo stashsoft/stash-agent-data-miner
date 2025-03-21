@@ -35,6 +35,10 @@ export default createGlobalStyle(({ theme }:{ theme: Theme }) => `
     font-weight: 500;
   }
 
+  ul {
+    list-style: none;
+  }
+
   .fade-show {
     opacity: 0;
   }

@@ -1,13 +1,12 @@
 import Div from '@smart-react-components/core/Element/Div'
 import Li from '@smart-react-components/core/Element/Li'
-import P from '@smart-react-components/core/Element/P'
 import Ul from '@smart-react-components/core/Element/Ul'
 import Alert from '@smart-react-components/ui/Alert'
+import AlertIcon from '@smart-react-components/ui/Alert/AlertIcon'
 import React from 'react'
 import InfoIcon from '../icons/Info'
 import { Column } from '../types'
 import FormColumn from './FormColumn'
-import { AlertIcon } from '@smart-react-components/ui'
 
 interface Props {
   columns: Column[]

@@ -13,7 +13,7 @@ const Form = () => {
     name: '',
     description: '',
   }])
-  const [provider, setProvider] = React.useState('Openai')
+  const [provider, setProvider] = React.useState('OpenAI')
   const [modelName, setModelName] = React.useState('gpt-4o-mini')
   const [apiKey, setApiKey] = React.useState('')
 

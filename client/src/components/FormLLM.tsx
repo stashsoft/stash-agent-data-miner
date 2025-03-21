@@ -41,6 +41,7 @@ const FormLLM: React.FC<Props> = ({ provider, setProvider, modelName, setModelNa
       </Column>
       <Column col={12} colMd={6} paddingHorizontal={['$length.2', true]}>
         <Input
+          isDisabled={provider === 'Ollama'}
           label={<b>API key:</b>}
           marginTop={16}
           setValue={setApiKey}

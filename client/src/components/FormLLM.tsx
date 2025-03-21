@@ -25,10 +25,10 @@ const FormLLM: React.FC<Props> = ({ provider, setProvider, modelName, setModelNa
           marginTop={16}
           setActive={setProvider}
         >
-          <Option value="openai">OpenAI</Option>
-          <Option value="anthropic">Anthropic</Option>
-          <Option value="deepseek">Deepseek</Option>
-          <Option value="ollama">Ollama</Option>
+          <Option value="Openai">OpenAI</Option>
+          <Option value="Anthropic">Anthropic</Option>
+          <Option value="Deepseek">Deepseek</Option>
+          <Option value="Ollama">Ollama</Option>
         </SelectBox>
       </Column>
       <Column col={12} colMd={3} paddingHorizontal={['$length.2', true]}>

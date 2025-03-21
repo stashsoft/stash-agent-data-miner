@@ -1,10 +1,10 @@
 import Div from '@smart-react-components/core/Element/Div'
 import React from 'react'
+import { API_URL } from '../constants'
+import { ResultFile, ResultLog, ResultStatus } from '../types'
 import Form from './Form'
 import Intro from './Intro'
-import { ResultFile, ResultLog, ResultStatus } from '../types'
 import Results from './Results'
-import { API_URL } from '../constants'
 
 const App = () => {
   const [resultFiles, setResultFiles] = React.useState<ResultFile[]>([])

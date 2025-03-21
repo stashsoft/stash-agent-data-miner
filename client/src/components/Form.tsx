@@ -18,18 +18,10 @@ const Form = () => {
   const [apiKey, setApiKey] = React.useState('')
 
   return (
-    <Section
-      title="Agent"
-    >
-      <FormFiles
-        files={files}
-        setFiles={setFiles}
-      />
+    <Section title="Agent">
+      <FormFiles files={files} setFiles={setFiles} />
       <Separator />
-      <FormColumns
-        columns={columns}
-        setColumns={setColumns}
-      />
+      <FormColumns columns={columns} setColumns={setColumns} />
       <Separator />
       <FormLLM
         provider={provider}

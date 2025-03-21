@@ -6,10 +6,14 @@ export default () => {
     $: {
       color: {
         dark: {
+          resultBackground: '#202124',
+          resultBorder: '#161719',
           separator: '#161719',
           tabOverlayBackground: '#151618',
         },
         light: {
+          resultBackground: '#f1f5f7',
+          resultBorder: '#dee2e6',
           separator: '#dee2e6',
           tabOverlayBackground: '#dee2e6',
         },
@@ -18,12 +22,20 @@ export default () => {
         genericSpace: '0.7rem',
       },
       radius: {
+        button: {
+          rounded: '.5rem',
+        },
         generic: '.5rem',
+        input: {
+          rounded: '.5rem',
+        },
       },
     },
-  })
+  }, false)
 
   theme.$.palette.primary = createPaletteItem(theme.$.color.purple, theme)
+
+  theme.$.palette.info.font = theme.$.color.white
 
   theme.$.palette.light = createPaletteItem({
     main: theme.$.palette.light.main,

@@ -8,11 +8,11 @@ import CloseIcon from '../icons/Close'
 
 interface Props {
   children: JSX.Element | JSX.Element[]
-  onClose?: () => void
+  rightElement?: JSX.Element
   title: string
 }
 
-const SectionComponent: React.FC<Props> = ({ children, onClose, title }) => (
+const SectionComponent: React.FC<Props> = ({ children, rightElement, title }) => (
   <Section>
     <Header
       alignItems="center"
@@ -26,30 +26,14 @@ const SectionComponent: React.FC<Props> = ({ children, onClose, title }) => (
       >
         {title}
       </H1>
-      { onClose && (
-        <WaveEffect palette="dark">
-          <Div
-            borderRadius="100%"
-            display="flex"
-            marginLeft={8}
-            onClick={onClose}
-            padding={2}
-          >
-            <CloseIcon
-              cursor="pointer"
-              flex="0 0 auto"
-              iconSize={28}
-            />
-          </Div>
-        </WaveEffect>
-      ) }
+      { rightElement && rightElement }
     </Header>
     {children}
   </Section>
 )
 
 SectionComponent.defaultProps = {
-  onClose: null,
+  rightElement: null,
 }
 
 export default SectionComponent

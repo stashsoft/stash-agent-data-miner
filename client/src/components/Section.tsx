@@ -12,43 +12,41 @@ interface Props {
   title: string
 }
 
-const SectionComponent: React.FC<Props> = ({ children, onClose, title }) => {
-  return (
-    <Section>
-      <Header
-        alignItems="center"
-        display="flex"
-        justifyContent="space-between"
+const SectionComponent: React.FC<Props> = ({ children, onClose, title }) => (
+  <Section>
+    <Header
+      alignItems="center"
+      display="flex"
+      justifyContent="space-between"
+    >
+      <H1
+        flex="1 1 auto"
+        fontSize={25}
+        minHeight={1}
       >
-        <H1
-          flex="1 1 auto"
-          fontSize={25}
-          minHeight={1}
-        >
-          {title}
-        </H1>
-        { onClose && (
-          <WaveEffect palette="dark">
-            <Div
-              borderRadius="100%"
-              display="flex"
-              marginLeft={8}
-              onClick={onClose}
-              padding={2}
-            >
-              <CloseIcon
-                cursor="pointer"
-                flex="0 0 auto"
-                iconSize={28}
-              />
-            </Div>
-          </WaveEffect>
-        ) }
-      </Header>
-      {children}
-    </Section>
-  )
-}
+        {title}
+      </H1>
+      { onClose && (
+        <WaveEffect palette="dark">
+          <Div
+            borderRadius="100%"
+            display="flex"
+            marginLeft={8}
+            onClick={onClose}
+            padding={2}
+          >
+            <CloseIcon
+              cursor="pointer"
+              flex="0 0 auto"
+              iconSize={28}
+            />
+          </Div>
+        </WaveEffect>
+      ) }
+    </Header>
+    {children}
+  </Section>
+)
 
 SectionComponent.defaultProps = {
   onClose: null,
